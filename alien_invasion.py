@@ -32,10 +32,9 @@ class AlienInvasion:
                 sys.exit()
 
     def _update_screen(self):
-        self.screen.fill(self.settings.bg_color)
+        self.screen.blit(self.settings.bg_image,(0,0))
         self.ship.blitme()
         pygame.display.flip()
-
 
 
 if __name__ == '__main__':
