@@ -17,6 +17,15 @@ class Ship:
         self.rect.midbottom=self.screen_rect.midbottom
         #两个rect的底部中心重合
 
+        self.moving_right = False
+        self.moving_left = False
+
     def blitme(self):
         self.screen.blit(self.image,self.rect)
         #把image画到rect里
+
+    def update(self):
+        if self.moving_right==True:
+            self.rect.x += 1
+        if self.moving_left==True:
+            self.rect.x-=1
