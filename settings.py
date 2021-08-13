@@ -13,3 +13,9 @@ class Settings:
         self.bg_color = (230, 230, 230)
         self.bg_image = pygame.image.load('./images/Gargantua.bmp')
         self.ship_speed = 1.5
+
+        # 子弹设置
+        self.bullet_speed = 1.5
+        self.bullet_width = 3
+        self.bullet_height = 15
+        self.bullet_color = (255,0,0)

@@ -22,6 +22,8 @@ class AlienInvasion:
         # self.screen = pygame.display.set_mode((0,0),pygame.FULLSCREEN)
 
         self.ship = Ship(self)
+        self.bullets = pygame.sprite.Group()
+
         pygame.display.set_caption("Alien Invasion")
 
     def _check_event(self):
@@ -57,7 +59,8 @@ class AlienInvasion:
     def run_game(self):
         while True:
             self._check_event()
-            self.ship.update(self)
+            self.ship.update()
+            self.bullets.update()
             self._update_screen()
 
 

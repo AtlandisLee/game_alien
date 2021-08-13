@@ -14,6 +14,7 @@ class Ship:
 
         self.image = pygame.image.load('./images/ship.bmp')
         self.rect = self.image.get_rect()
+        self.speed = ai_game.settings.ship_speed
 
         self.rect.midbottom = self.screen_rect.midbottom
         # 两个rect的底部中心重合
@@ -26,10 +27,9 @@ class Ship:
         self.screen.blit(self.image, self.rect)
         # 把image画到rect里
 
-    def update(self, ai_game):
+    def update(self):
         if self.moving_right and self.rect.right<self.screen_rect.right:
-            self.x += ai_game.settings.ship_speed
+            self.x += self.speed
         if self.moving_left and self.rect.left>0:
-            self.x -= ai_game.settings.ship_speed
-
+            self.x -= self.speed
         self.rect.x =self.x
