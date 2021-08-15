@@ -31,6 +31,14 @@ class AlienInvasion:
 
         pygame.display.set_caption("Alien Invasion")
 
+    def run_game(self):
+        while True:
+            self._check_event()
+            self.ship.update()
+            self.bullets.update()
+            self._check_magazine()
+            self._update_screen()
+
     def _check_event(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -68,10 +76,6 @@ class AlienInvasion:
             if bullet.rect.y < 0:
                 self.bullets.remove(bullet)
 
-    def _create_fleet(self):
-        alien = Alien(self)
-        self.aliens.add(alien)
-
     def _update_screen(self):
         self.screen.fill(self.settings.bg_color)
         # self.screen.blit(self.settings.bg_image, (0, 0))
@@ -81,13 +85,29 @@ class AlienInvasion:
         self.aliens.draw(self.screen)
         pygame.display.flip()
 
-    def run_game(self):
-        while True:
-            self._check_event()
-            self.ship.update()
-            self.bullets.update()
-            self._check_magazine()
-            self._update_screen()
+    def _create_fleet(self):
+        alien_sup =Alien(self)
+        alien_width,alien_height =alien_sup.rect.size
+        #screen_margin = alien_width
+        num_alien_x = (self.settings.screen_width-2*alien_width)\
+                      //(2*alien_width)
+        num_rows = (self.settings.screen_height-3*alien_height-
+                    self.ship.rect.height)//(2*alien_height)
+
+        for row in range(num_rows):
+            for num in range(num_alien_x):
+                self._add_alien(num,row)
+
+
+    def _add_alien(self, num,row):
+        alien = Alien(self)
+        alien_width,alien_height = alien.rect.size
+        alien.x=alien_width+num*2*alien_width
+        alien.y=alien_height*(row*2+1)
+        alien.rect.x=alien.x
+        alien.rect.y=alien.y
+        self.aliens.add(alien)
+
 
 
 if __name__ == '__main__':
