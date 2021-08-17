@@ -17,7 +17,7 @@ class AlienInvasion:
     def __init__(self):
         pygame.init()
         self.settings = Settings()
-        #窗口游戏
+        # 窗口游戏
         self.screen = pygame.display.set_mode((self.settings.screen_width,
                                                self.settings.screen_height))
         # 全屏游戏
@@ -31,12 +31,35 @@ class AlienInvasion:
 
         pygame.display.set_caption("Alien Invasion")
 
+    def _create_fleet(self):
+        alien_sup = Alien(self)
+        alien_width, alien_height = alien_sup.rect.size
+        # screen_margin = alien_width
+        num_alien_x = (self.settings.screen_width - 2 * alien_width) \
+                      // (2 * alien_width)
+        num_rows = (self.settings.screen_height - 3 * alien_height -
+                    self.ship.rect.height) // (2 * alien_height)
+
+        for row in range(num_rows):
+            for num in range(num_alien_x):
+                self._add_alien(num, row)
+
+    def _add_alien(self, num, row):
+        alien = Alien(self)
+        alien_width, alien_height = alien.rect.size
+        alien.x = alien_width + num * 2 * alien_width
+        alien.y = alien_height * (row * 2 + 1)
+        alien.rect.x = alien.x
+        alien.rect.y = alien.y
+        self.aliens.add(alien)
+
     def run_game(self):
         while True:
             self._check_event()
             self.ship.update()
             self.bullets.update()
-            self._check_magazine()
+            self._check_bullet_out()
+            self._aliens_update()
             self._update_screen()
 
     def _check_event(self):
@@ -50,7 +73,7 @@ class AlienInvasion:
             # 这里之所以可以使用elif 代码块，是因为每个事件都只与一个键相关联。
             # 如果玩家同时按下左右箭头键，将检测到两个不同的事件。
 
-    def _check_keydown_event(self,event):
+    def _check_keydown_event(self, event):
         if event.key == pygame.K_RIGHT:
             self.ship.moving_right = True
         elif event.key == pygame.K_LEFT:
@@ -59,11 +82,11 @@ class AlienInvasion:
             self._fire_bullet()
 
     def _fire_bullet(self):
-        if len(self.bullets)<self.settings.bullet_magazine:
+        if len(self.bullets) < self.settings.bullet_magazine:
             new_bullet = Bullet(self)
             self.bullets.add(new_bullet)
 
-    def _check_keyup_event(self,event):
+    def _check_keyup_event(self, event):
         if event.key == pygame.K_RIGHT:
             self.ship.moving_right = False
         elif event.key == pygame.K_LEFT:
@@ -71,10 +94,23 @@ class AlienInvasion:
         elif event.key == pygame.K_q:
             sys.exit()
 
-    def _check_magazine(self):
+    def _check_bullet_out(self):
         for bullet in self.bullets.copy():
             if bullet.rect.y < 0:
                 self.bullets.remove(bullet)
+
+    def _aliens_update(self):
+        if self._check_fleet_edge():
+            self.settings.fleet_xdirection *= -1
+            for alien in self.aliens:
+                alien.rect.y += self.settings.alien_y_drop
+        self.aliens.update()
+
+    def _check_fleet_edge(self):
+        for alien in self.aliens:
+            if alien.rect.right >= self.settings.screen_width \
+                    or alien.rect.left <= 0:
+                return True
 
     def _update_screen(self):
         self.screen.fill(self.settings.bg_color)
@@ -84,30 +120,6 @@ class AlienInvasion:
             bullet.draw_bullet()
         self.aliens.draw(self.screen)
         pygame.display.flip()
-
-    def _create_fleet(self):
-        alien_sup =Alien(self)
-        alien_width,alien_height =alien_sup.rect.size
-        #screen_margin = alien_width
-        num_alien_x = (self.settings.screen_width-2*alien_width)\
-                      //(2*alien_width)
-        num_rows = (self.settings.screen_height-3*alien_height-
-                    self.ship.rect.height)//(2*alien_height)
-
-        for row in range(num_rows):
-            for num in range(num_alien_x):
-                self._add_alien(num,row)
-
-
-    def _add_alien(self, num,row):
-        alien = Alien(self)
-        alien_width,alien_height = alien.rect.size
-        alien.x=alien_width+num*2*alien_width
-        alien.y=alien_height*(row*2+1)
-        alien.rect.x=alien.x
-        alien.rect.y=alien.y
-        self.aliens.add(alien)
-
 
 
 if __name__ == '__main__':
