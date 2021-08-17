@@ -15,6 +15,7 @@ from bullet import Bullet
 from alien import Alien
 from game_stats import GameStats
 from button import Button
+from scoreboard import Scoreboard
 
 
 class AlienInvasion:
@@ -28,6 +29,7 @@ class AlienInvasion:
         # self.screen = pygame.display.set_mode((0,0),pygame.FULLSCREEN)
 
         self.stats = GameStats(self)
+        self.scoreboard = Scoreboard(self)
 
         self.play_button = Button(self, 'PLAY')
 
@@ -186,6 +188,7 @@ class AlienInvasion:
         if not self.stats.game_active:
             self.play_button.draw()
 
+        self.scoreboard.show_score()
         pygame.display.flip()
 
 
