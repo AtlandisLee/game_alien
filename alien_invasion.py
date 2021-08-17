@@ -13,6 +13,7 @@ from ship import Ship
 from bullet import Bullet
 from alien import Alien
 from game_stats import GameStats
+from button import Button
 
 
 class AlienInvasion:
@@ -26,6 +27,8 @@ class AlienInvasion:
         # self.screen = pygame.display.set_mode((0,0),pygame.FULLSCREEN)
 
         self.stats = GameStats(self)
+
+        self.play_button = Button(self, 'PLAY')
 
         self.ship = Ship(self)
         self.bullets = pygame.sprite.Group()
@@ -153,6 +156,8 @@ class AlienInvasion:
         for bullet in self.bullets.sprites():
             bullet.draw_bullet()
         self.aliens.draw(self.screen)
+
+        self.play_button.draw()
         pygame.display.flip()
 
 
