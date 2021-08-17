@@ -7,10 +7,12 @@
 
 import sys
 import pygame
+from time import sleep
 from settings import Settings
 from ship import Ship
 from bullet import Bullet
 from alien import Alien
+from game_stats import GameStats
 
 
 class AlienInvasion:
@@ -22,6 +24,8 @@ class AlienInvasion:
                                                self.settings.screen_height))
         # 全屏游戏
         # self.screen = pygame.display.set_mode((0,0),pygame.FULLSCREEN)
+
+        self.stats = GameStats(self)
 
         self.ship = Ship(self)
         self.bullets = pygame.sprite.Group()
@@ -56,10 +60,12 @@ class AlienInvasion:
     def run_game(self):
         while True:
             self._check_event()
-            self.ship.update()
-            self._update_bullets()
-            self._update_aliens()
-            self._collisions()
+            if self.stats.game_active:
+                self.ship.update()
+                self._update_bullets()
+                self._update_aliens()
+                self._target_hitted()
+                self._check_ship_reduce()
             self._update_screen()
 
     def _check_event(self):
@@ -113,11 +119,32 @@ class AlienInvasion:
                     or alien.rect.left <= 0:
                 return True
 
-    def _collisions(self):
+    def _target_hitted(self):
         pygame.sprite.groupcollide(self.bullets, self.aliens, True, True)
         if not self.aliens:
             self.bullets.empty()
             self._create_fleet()
+
+    def _check_ship_reduce(self):
+        if pygame.sprite.spritecollideany(self.ship, self.aliens):
+            self._lost_one_ship()
+        for alien in self.aliens:
+            if alien.rect.bottom >= self.screen.get_rect().bottom:
+                self._lost_one_ship()
+                break
+
+    def _lost_one_ship(self):
+        if self.stats.ships_remain > 1:
+            self.stats.ships_remain -= 1
+
+            self.bullets.empty()
+            self.aliens.empty()
+            sleep(0.5)
+
+            self._create_fleet()
+            self.ship.recenter()
+        else:
+            self.stats.game_active = False
 
     def _update_screen(self):
         self.screen.fill(self.settings.bg_color)

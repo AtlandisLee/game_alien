@@ -12,6 +12,9 @@ class Settings:
         self.screen_height = 800
         self.bg_color = (230, 230, 230)
         self.bg_image = pygame.image.load('./images/Gargantua.bmp')
+
+        # 飞船设置
+        self.ship_limit = 3
         self.ship_speed = 1.0
 
         # 子弹设置
@@ -23,5 +26,5 @@ class Settings:
 
         # 外星人设置
         self.alien_speed = 0.3
-        self.alien_y_drop = 5
+        self.alien_y_drop = 50
         self.fleet_xdirection = 1

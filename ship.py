@@ -33,3 +33,7 @@ class Ship:
         if self.moving_left and self.rect.left > 0:
             self.x -= self.speed
         self.rect.x = self.x
+
+    def recenter(self):
+        self.rect.midbottom = self.screen_rect.midbottom
+        self.x = float(self.rect.x)
