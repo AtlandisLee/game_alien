@@ -59,6 +59,7 @@ class AlienInvasion:
             self.ship.update()
             self._update_bullets()
             self._update_aliens()
+            self._collisions()
             self._update_screen()
 
     def _check_event(self):
@@ -111,6 +112,12 @@ class AlienInvasion:
             if alien.rect.right >= self.settings.screen_width \
                     or alien.rect.left <= 0:
                 return True
+
+    def _collisions(self):
+        pygame.sprite.groupcollide(self.bullets, self.aliens, True, True)
+        if not self.aliens:
+            self.bullets.empty()
+            self._create_fleet()
 
     def _update_screen(self):
         self.screen.fill(self.settings.bg_color)
