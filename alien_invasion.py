@@ -100,6 +100,7 @@ class AlienInvasion:
 
     def _restart_game(self):
         self.stats.reset_stats()
+        self.scoreboard.prep_score()
         self.stats.game_active = True
 
         self.bullets.empty()
@@ -149,7 +150,12 @@ class AlienInvasion:
                 return True
 
     def _target_hitted(self):
-        pygame.sprite.groupcollide(self.bullets, self.aliens, True, True)
+        hitting = pygame.sprite.groupcollide(self.bullets, self.aliens, True, True)
+        if hitting:
+            for aliens in hitting.values():
+                self.stats.score += self.settings.alien_points * len(aliens)
+            self.scoreboard.prep_score()
+            self.scoreboard.check_highest_score()
         if not self.aliens:
             self.bullets.empty()
             self._create_fleet()

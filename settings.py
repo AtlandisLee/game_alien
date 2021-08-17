@@ -18,23 +18,24 @@ class Settings:
         self.ship_limit = 3
 
         # 子弹设置
-        self.bullet_speed = 1.5
-        self.bullet_width = 5
+        self.bullet_width = 500
         self.bullet_height = 15
         self.bullet_color = (255, 0, 0)
         self.bullet_magazine = 5
 
         # 外星人设置
-        self.alien_speed = 0.3
         self.alien_y_drop = 10
         self.fleet_xdirection = 1
 
-        self.speedup_scale = 2
+        self.speedup_scale = 1.2
+        self.scoreup_scale = 2
 
     def init_speed(self):
         self.ship_speed = 1.0
         self.bullet_speed = 1.5
         self.alien_speed = 0.3
+
+        self.alien_points = 50
 
         self.fleet_xdirection = 1
 
@@ -42,3 +43,5 @@ class Settings:
         self.ship_speed *= self.speedup_scale
         self.bullet_speed *= self.speedup_scale
         self.alien_speed *= self.speedup_scale
+
+        self.alien_points *= self.scoreup_scale
