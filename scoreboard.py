@@ -4,10 +4,13 @@
 日期：2021年08月17日
 """
 import pygame.font
+from pygame.sprite import Group
 
+from ship import Ship
 
 class Scoreboard:
     def __init__(self, ai_game):
+        self.ai = ai_game
         self.screen = ai_game.screen
         self.screen_rect = ai_game.screen.get_rect()
         self.settings = ai_game.settings
@@ -20,6 +23,7 @@ class Scoreboard:
         self.prep_level()
         self.prep_score()
         self.prep_highest_score()
+        self.prep_ships()
 
 
     def prep_score(self):
@@ -53,7 +57,16 @@ class Scoreboard:
         self.level_rect.right = self.screen_rect.right - 20
         self.level_rect.top = 20
 
+    def prep_ships(self):
+        self.ships = Group()
+        for i in range(self.stats.ships_remain):
+            ship = Ship(self.ai)
+            ship.rect.left = i * ship.rect.width + 10
+            ship.rect.top = 20
+            self.ships.add(ship)
+
     def show_score(self):
         self.screen.blit(self.score_image, self.score_rect)
         self.screen.blit(self.highest_score_image, self.highest_score_rect)
         self.screen.blit(self.level_image, self.level_rect)
+        self.ships.draw(self.screen)

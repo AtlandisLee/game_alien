@@ -100,13 +100,15 @@ class AlienInvasion:
 
     def _restart_game(self):
         self.stats.reset_stats()
+        self.scoreboard.prep_level()
         self.scoreboard.prep_score()
+        self.scoreboard.prep_ships()
         self.stats.game_active = True
 
         self.bullets.empty()
         self.aliens.empty()
 
-        self.settings.init_speed()
+        self.settings.init_level()
         self._create_fleet()
         self.ship.recenter()
 
@@ -159,7 +161,9 @@ class AlienInvasion:
         if not self.aliens:
             self.bullets.empty()
             self._create_fleet()
-            self.settings.speedup()
+            self.settings.level_up()
+            self.stats.level += 1
+            self.scoreboard.prep_level()
 
     def _check_ship_reduce(self):
         if pygame.sprite.spritecollideany(self.ship, self.aliens):
@@ -172,6 +176,7 @@ class AlienInvasion:
     def _lost_one_ship(self):
         if self.stats.ships_remain > 1:
             self.stats.ships_remain -= 1
+            self.scoreboard.prep_ships()
 
             self.bullets.empty()
             self.aliens.empty()

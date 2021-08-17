@@ -30,7 +30,7 @@ class Settings:
         self.speedup_scale = 1.2
         self.scoreup_scale = 2
 
-    def init_speed(self):
+    def init_level(self):
         self.ship_speed = 1.0
         self.bullet_speed = 1.5
         self.alien_speed = 0.3
@@ -39,7 +39,7 @@ class Settings:
 
         self.fleet_xdirection = 1
 
-    def speedup(self):
+    def level_up(self):
         self.ship_speed *= self.speedup_scale
         self.bullet_speed *= self.speedup_scale
         self.alien_speed *= self.speedup_scale
