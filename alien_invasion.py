@@ -8,6 +8,7 @@
 import sys
 import pygame
 from time import sleep
+
 from settings import Settings
 from ship import Ship
 from bullet import Bullet
@@ -102,6 +103,7 @@ class AlienInvasion:
         self.bullets.empty()
         self.aliens.empty()
 
+        self.settings.init_speed()
         self._create_fleet()
         self.ship.recenter()
 
@@ -149,6 +151,7 @@ class AlienInvasion:
         if not self.aliens:
             self.bullets.empty()
             self._create_fleet()
+            self.settings.speedup()
 
     def _check_ship_reduce(self):
         if pygame.sprite.spritecollideany(self.ship, self.aliens):
@@ -182,7 +185,7 @@ class AlienInvasion:
 
         if not self.stats.game_active:
             self.play_button.draw()
-            
+
         pygame.display.flip()
 
 
