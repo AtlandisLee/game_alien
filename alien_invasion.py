@@ -77,6 +77,7 @@ class AlienInvasion:
     def _check_event(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                self._load_highest_score()
                 sys.exit()
             elif event.type == pygame.KEYDOWN:
                 self._check_keydown_event(event)
@@ -125,6 +126,7 @@ class AlienInvasion:
         elif event.key == pygame.K_LEFT:
             self.ship.moving_left = False
         elif event.key == pygame.K_q:
+            self._load_highest_score()
             sys.exit()
 
     def _check_play_button(self, mouse_posi):
@@ -202,6 +204,9 @@ class AlienInvasion:
         self.scoreboard.show_score()
         pygame.display.flip()
 
+    def _load_highest_score(self):
+        with open('history highest score.txt', 'w') as loc:
+            loc.write(str(self.stats.highest_score))
 
 if __name__ == '__main__':
     ai = AlienInvasion()

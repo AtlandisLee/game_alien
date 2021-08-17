@@ -11,9 +11,13 @@ class GameStats:
         self.reset_stats()
         self.game_active = False
 
-        self.highest_score = 0
+        self._local_highest_score()
 
     def reset_stats(self):
         self.ships_remain = self.settings.ship_limit
         self.score = 0
         self.level = 1
+
+    def _local_highest_score(self):
+        with open('history highest score.txt', 'r') as loc:
+            self.highest_score = int(loc.read())
