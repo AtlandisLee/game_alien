@@ -57,9 +57,8 @@ class AlienInvasion:
         while True:
             self._check_event()
             self.ship.update()
-            self.bullets.update()
-            self._check_bullet_out()
-            self._aliens_update()
+            self._update_bullets()
+            self._update_aliens()
             self._update_screen()
 
     def _check_event(self):
@@ -94,12 +93,13 @@ class AlienInvasion:
         elif event.key == pygame.K_q:
             sys.exit()
 
-    def _check_bullet_out(self):
+    def _update_bullets(self):
+        self.bullets.update()
         for bullet in self.bullets.copy():
             if bullet.rect.y < 0:
                 self.bullets.remove(bullet)
 
-    def _aliens_update(self):
+    def _update_aliens(self):
         if self._check_fleet_edge():
             self.settings.fleet_xdirection *= -1
             for alien in self.aliens:
