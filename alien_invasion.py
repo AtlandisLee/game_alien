@@ -81,6 +81,9 @@ class AlienInvasion:
                 self._check_keyup_event(event)
             # 这里之所以可以使用elif 代码块，是因为每个事件都只与一个键相关联。
             # 如果玩家同时按下左右箭头键，将检测到两个不同的事件。
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                mouse_posi = pygame.mouse.get_pos()
+                self._check_play_button(mouse_posi)
 
     def _check_keydown_event(self, event):
         if event.key == pygame.K_RIGHT:
@@ -89,6 +92,20 @@ class AlienInvasion:
             self.ship.moving_left = True
         elif event.key == pygame.K_SPACE:
             self._fire_bullet()
+        elif event.key == pygame.K_p:
+            self._restart_game()
+
+    def _restart_game(self):
+        self.stats.reset_stats()
+        self.stats.game_active = True
+
+        self.bullets.empty()
+        self.aliens.empty()
+
+        self._create_fleet()
+        self.ship.recenter()
+
+        pygame.mouse.set_visible(False)
 
     def _fire_bullet(self):
         if len(self.bullets) < self.settings.bullet_magazine:
@@ -102,6 +119,11 @@ class AlienInvasion:
             self.ship.moving_left = False
         elif event.key == pygame.K_q:
             sys.exit()
+
+    def _check_play_button(self, mouse_posi):
+        if self.play_button.rect.collidepoint(mouse_posi) \
+                and not self.stats.game_active:
+            self._restart_game()
 
     def _update_bullets(self):
         self.bullets.update()
@@ -148,6 +170,7 @@ class AlienInvasion:
             self.ship.recenter()
         else:
             self.stats.game_active = False
+            pygame.mouse.set_visible(True)
 
     def _update_screen(self):
         self.screen.fill(self.settings.bg_color)
@@ -157,7 +180,9 @@ class AlienInvasion:
             bullet.draw_bullet()
         self.aliens.draw(self.screen)
 
-        self.play_button.draw()
+        if not self.stats.game_active:
+            self.play_button.draw()
+            
         pygame.display.flip()
 
 
